@@ -1,7 +1,7 @@
 #ifndef COMPANY_H
 #define COMPANY_H
-#include <QString>
 #include <QVector>
+#include <QString>
 
 class Company
 {
@@ -11,12 +11,45 @@ private:
     double income_;
     double area_;
     int numberOfEmployees_;
-    enum type { Private, Public, Multinational, Government };
 public:
+    Company(QString &name, QVector<QString> &owners, double income = 0, double area = 0, int numOfEmps = 0);
+    enum type { Private, Multinational, Government };
     virtual type getCompanyType() = 0;
     virtual double getTaxPerMonth() = 0;
+    QString getCompanyName() const { return name_; }
+    QVector<QString> getCompanyOwners() const { return owners_; };
+    double getIncome() const { return income_; }
+    double getArea() const { return area_; }
+    int getNumberOfEmployess() const { return numberOfEmployees_; }
 };
 
 
+class PrivateCompany : public Company
+{
+public:
+    PrivateCompany(QString &name, QVector<QString> &owners,
+                   double income = 0, double area = 0, int numberOfEmployees = 0);
+    type getCompanyType();
+    double getTaxPerMonth();
+};
 
-#endif // COMPANY_H
+
+class MultinationalCompany : public Company
+{
+public:
+    MultinationalCompany(QString &name, QVector<QString> &owners,
+                   double income = 0, double area = 0, int numberOfEmployees = 0);
+    type getCompanyType();
+    double getTaxPerMonth();
+};
+
+class GovernmentCompany : public Company
+{
+public:
+    GovernmentCompany(QString &name, QVector<QString> &owners,
+                     double income = 0, double area = 0, int numberOfEmployees = 0);
+    type getCompanyType();
+    double getTaxPerMonth();
+};
+
+#endif //COMPANY_H
