@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         company.cpp \
+        companyregistry.cpp \
         main.cpp
 
 # Default rules for deployment.
