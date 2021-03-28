@@ -70,7 +70,18 @@ int main(int argc, char *argv[])
     cr.AddCompany(*gc);
 
     // 1. Вывести в консоль информацию о предприятиях определённого типа.
-    getInfoByType(Company::type::Private, cr, out);
+    getInfoByType(Company::type::Multinational, cr, out);
+    // 2. Вывести в консоль все предприятия, принадлежащие определённому владельцу.
+    out << Qt::endl;
+    getCompaniesByOwner(QString::fromUtf8("Bill Gates"), cr, out);
+    // 3. Вывести в консоль средние показатели (доход, площадь, число сотрудников) предприятий для каждого из типов.
+    out << Qt::endl;
+    getAverageValues(Company::type::Private, cr, out);
 
+
+    delete mc;
+    delete pc1;
+    delete pc2;
+    delete gc;
     return app.exec();
 }
