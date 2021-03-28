@@ -1,33 +1,38 @@
 #include <QCoreApplication>
 #include <QTextStream>
-#include "company.h"
+#include "companyregistry.h"
 
-void getCompanyInfo(Company& c, QTextStream& out)
+
+
+void getInfoByType(Company::type tp, CompanyRegistry& cr, QTextStream& out)
 {
-    switch (c.getCompanyType()) {
+    switch (tp) {
     case Company::type::Private:
-        out << "Type: Private" << Qt::endl;
+        out << "Private companies: " << Qt::endl;
         break;
     case Company::type::Multinational:
-        out << "Type: Multinational" << Qt::endl;
+        out << "Multinational companies: " << Qt::endl;
         break;
     case Company::type::Government:
-        out << "Type: Government" << Qt::endl;
+        out << "Government companies: " << Qt::endl;
         break;
     }
-    out << "Tax: " << c.getTaxPerMonth() << Qt::endl;
-    out << "Name: " << c.getCompanyName() << Qt::endl;
-    out << "Owners: ";
-    for (size_t i = 0; i < c.getCompanyOwners().size(); i++)
-    {
-        out << c.getCompanyOwners().operator[](i);
-        if (i != c.getCompanyOwners().size() - 1)
-            out << ", ";
+    for (int i = 0; i < cr.getRegistrySize(); i++) {
+        if (cr.getCompanyByIndex(i)->getCompanyType() == tp) {
+            out << "Name: " << cr.getCompanyByIndex(i)->getCompanyName() << Qt::endl;
+            out << "Owners: ";
+            for (int j = 0; j < cr.getCompanyByIndex(i)->getCompanyOwners().size(); j++)
+            {
+                out << cr.getCompanyByIndex(i)->getCompanyOwners().operator[](j);
+                if (j != cr.getCompanyByIndex(i)->getCompanyOwners().size() - 1)
+                    out << ", ";
+            }
+            out << Qt::endl;
+            out << "Income: " << cr.getCompanyByIndex(i)->getIncome() << Qt::endl;
+            out << "Area: " << cr.getCompanyByIndex(i)->getArea() << Qt::endl;
+            out << "Number of employees: " << cr.getCompanyByIndex(i)->getNumberOfEmployess() << Qt::endl;
+        }
     }
-    out << Qt::endl;
-    out << "Income: " << c.getIncome() << Qt::endl;
-    out << "Area: " << c.getArea() << Qt::endl;
-    out << "Number of employees: " << c.getNumberOfEmployess() << Qt::endl;
 }
 
 
@@ -35,13 +40,37 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     QTextStream out(stdout);
-    QVector<QString> ownersm;
-    QString namem = "Microsoft";
-    ownersm.append(QString::fromUtf8("Bill Gates"));
-    ownersm.append(QString::fromUtf8("Steve Jobs"));
+    /* Initializing Microsoft data */
+    QVector<QString> mowners;
+    QString mname = "Microsoft";
+    mowners.append(QString::fromUtf8("Bill Gates"));
+    mowners.append(QString::fromUtf8("Paul Allen"));
+    Company* mc = new MultinationalCompany(mname, mowners, 100000, 40000, 300);
+    /* Initializing Skype data */
+    QVector<QString> sowners;
+    QString sname = "Skype";
+    sowners.append(QString::fromUtf8("Bill Gates"));
+    Company* pc1 = new PrivateCompany(sname, sowners, 40000, 10000, 250);
+    /* Initializing IKEA data */
+    QVector<QString> iowners;
+    QString iname = "IKEA";
+    iowners.append(QString::fromUtf8("Ingvar Kamprad"));
+    Company* pc2 = new PrivateCompany(iname, iowners, 60000, 20000, 450);
+    /* Initializing Gazprom data */
+    QVector<QString> gowners;
+    QString gname = "Gazprom";
+    gowners.append(QString::fromUtf8("Alexey Miller"));
+    Company* gc = new GovernmentCompany(gname, gowners, 80000, 40000, 300);
 
-    PrivateCompany pc(namem, ownersm, 100000, 40000, 300);
-    getCompanyInfo(pc, out);
+
+    CompanyRegistry& cr = CompanyRegistry::getInstance();
+    cr.AddCompany(*mc);
+    cr.AddCompany(*pc1);
+    cr.AddCompany(*pc2);
+    cr.AddCompany(*gc);
+
+    // 1. Вывести в консоль информацию о предприятиях определённого типа.
+    getInfoByType(Company::type::Private, cr, out);
 
     return app.exec();
 }

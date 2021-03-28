@@ -18,7 +18,7 @@ public:
     CompanyRegistry() {}
     CompanyRegistry(CompanyRegistry& other) = delete;
     void operator=(const CompanyRegistry& cr) = delete;
-    static CompanyRegistry& getInstance(const QList<Company* >& cl);
+    static CompanyRegistry& getInstance();
     void AddCompany(Company& c);
     Company* getCompanyByIndex(int index) const;
     int getRegistrySize() const;

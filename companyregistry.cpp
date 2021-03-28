@@ -1,6 +1,6 @@
 #include "companyregistry.h"
 
-CompanyRegistry& CompanyRegistry::getInstance(const QList<Company* >& cl)
+CompanyRegistry& CompanyRegistry::getInstance()
 {
     static CompanyRegistry instance;
     return instance;
