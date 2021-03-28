@@ -3,44 +3,44 @@
 #include "companyregistry.h"
 
 
-
 void getInfoByType(Company::type tp, CompanyRegistry& cr, QTextStream& out)
 {
     switch (tp) {
     case Company::type::Private:
-        out << "Private companies: " << Qt::endl;
+	out << "Private companies: " << Qt::endl;
         break;
     case Company::type::Multinational:
-        out << "Multinational companies: " << Qt::endl;
+	out << "Multinational companies: " << Qt::endl;
         break;
     case Company::type::Government:
-        out << "Government companies: " << Qt::endl;
+	out << "Government companies: " << Qt::endl;
         break;
     }
-    for (int i = 0; i < cr.getRegistrySize(); i++) {
+    for (size_t i = 0; i < cr.getRegistrySize(); i++) {
         if (cr.getCompanyByIndex(i)->getCompanyType() == tp) {
-            out << "Name: " << cr.getCompanyByIndex(i)->getCompanyName() << Qt::endl;
+	    out << "Name: " << cr.getCompanyByIndex(i)->getCompanyName() << Qt::endl;
             out << "Owners: ";
-            for (int j = 0; j < cr.getCompanyByIndex(i)->getCompanyOwners().size(); j++)
+            for (size_t j = 0; j < cr.getCompanyByIndex(i)->getCompanyOwners().size(); j++)
             {
                 out << cr.getCompanyByIndex(i)->getCompanyOwners().operator[](j);
                 if (j != cr.getCompanyByIndex(i)->getCompanyOwners().size() - 1)
                     out << ", ";
             }
-            out << Qt::endl;
-            out << "Income: " << cr.getCompanyByIndex(i)->getIncome() << Qt::endl;
-            out << "Area: " << cr.getCompanyByIndex(i)->getArea() << Qt::endl;
-            out << "Number of employees: " << cr.getCompanyByIndex(i)->getNumberOfEmployess() << Qt::endl;
+	    out << Qt::endl;
+	    out << "Income: " << cr.getCompanyByIndex(i)->getIncome() << Qt::endl;
+	    out << "Area: " << cr.getCompanyByIndex(i)->getArea() << Qt::endl;
+	    out << "Number of employees: " << cr.getCompanyByIndex(i)->getNumberOfEmployess() << Qt::endl;
         }
     }
 }
+
 void getAverageValues(Company::type tp, CompanyRegistry& cr, QTextStream& out)
 {
     int n = 0;
     float sumIncome = 0;
     float sumArea = 0;
     float sumNumberOfEmployees = 0;
-    for (int i = 0; i < cr.getRegistrySize(); i++) {
+    for (size_t i = 0; i < cr.getRegistrySize(); i++) {    
         if (tp == cr.getCompanyByIndex(i)->getCompanyType()) {
             sumIncome += cr.getCompanyByIndex(i)->getIncome();
             sumArea += cr.getCompanyByIndex(i)->getArea();
@@ -58,12 +58,12 @@ void getCompaniesByOwner(QString&& owner, CompanyRegistry& cr, QTextStream& out)
     bool found = false;
     if (!owner.isEmpty()) {
         int companies_per_owner = 0;
-        for (int i = 0; i < cr.getRegistrySize(); i++) {
-            for (int j = 0; j < cr.getCompanyByIndex(i)->getCompanyOwners().size(); j++) {
+        for (size_t i = 0; i < cr.getRegistrySize(); i++) {    
+            for (size_t j = 0; j < cr.getCompanyByIndex(i)->getCompanyOwners().size(); j++) {
                 if (owner == cr.getCompanyByIndex(i)->getCompanyOwners().at(j)) {
                     if (companies_per_owner > 0)
                         out << ", " << cr.getCompanyByIndex(i)->getCompanyName();
-                    else
+                    else 
                         out << owner << " owns " << cr.getCompanyByIndex(i)->getCompanyName();
                     companies_per_owner++;
                     found = true;
@@ -75,7 +75,11 @@ void getCompaniesByOwner(QString&& owner, CompanyRegistry& cr, QTextStream& out)
         out << "Nothing found!";
     out << Qt::endl;
 }
-
+// В main.cpp требуется реализовать следующие функции:
+// 1. Вывести в консоль информацию о предприятиях определённого типа.
+// 2. Вывести в консоль все предприятия, принадлежащие определённому владельцу.
+// 3. Вывести в консоль средние показатели (доход, площадь, число сотрудников) предприятий для каждого из типов.
+// А также заполнить реестр (добавить несколько предприятий различных типов) и продемонстрировать на нём работу этих функций.
 
 int main(int argc, char *argv[])
 {
@@ -100,18 +104,18 @@ int main(int argc, char *argv[])
     /* Initializing Gazprom data */
     QVector<QString> gowners;
     QString gname = "Gazprom";
-    gowners.append(QString::fromUtf8("Alexey Miller"));
+    gowners.append(QString::fromUtf8("Alexey Miller")); 
     Company* gc = new GovernmentCompany(gname, gowners, 80000, 40000, 300);
 
 
-    CompanyRegistry& cr = CompanyRegistry::getInstance();
+    CompanyRegistry& cr = CompanyRegistry::getInstance(QList<Company* >());
     cr.AddCompany(*mc);
     cr.AddCompany(*pc1);
     cr.AddCompany(*pc2);
     cr.AddCompany(*gc);
 
     // 1. Вывести в консоль информацию о предприятиях определённого типа.
-    getInfoByType(Company::type::Multinational, cr, out);
+    getInfoByType(Company::type::Private, cr, out);
     // 2. Вывести в консоль все предприятия, принадлежащие определённому владельцу.
     out << Qt::endl;
     getCompaniesByOwner(QString::fromUtf8("Bill Gates"), cr, out);
@@ -124,5 +128,6 @@ int main(int argc, char *argv[])
     delete pc1;
     delete pc2;
     delete gc;
-    return app.exec();
+
+    return 0;
 }

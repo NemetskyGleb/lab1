@@ -21,7 +21,6 @@ public:
     double getIncome() const { return income_; }
     double getArea() const { return area_; }
     int getNumberOfEmployess() const { return numberOfEmployees_; }
-    virtual ~Company() {}
 };
 
 
