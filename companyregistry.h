@@ -14,8 +14,8 @@ class CompanyRegistry
 private:
     QList<Company* > companylist_;
     CompanyRegistry(const QList<Company* >& cl) : companylist_(cl) {}
-public:
     CompanyRegistry() {}
+public:
     CompanyRegistry(CompanyRegistry& other) = delete;
     void operator=(const CompanyRegistry& cr) = delete;
     static CompanyRegistry& getInstance();

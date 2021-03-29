@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 
 
     CompanyRegistry& cr = CompanyRegistry::getInstance();
+
     cr.AddCompany(*mc);
     cr.AddCompany(*pc1);
     cr.AddCompany(*pc2);
@@ -123,5 +124,5 @@ int main(int argc, char *argv[])
     delete pc1;
     delete pc2;
     delete gc;
-    return app.exec();
+    return 0;
 }
