@@ -119,7 +119,6 @@ int main(int argc, char *argv[])
     out << Qt::endl;
     getAverageValues(Company::type::Private, cr, out);
 
-
     delete mc;
     delete pc1;
     delete pc2;
